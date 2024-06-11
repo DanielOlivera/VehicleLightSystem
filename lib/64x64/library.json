@@ -1,0 +1,14 @@
+{
+    "name": "64x64",
+    "version": "1.0.0",
+    "description": "A library to draw a 64x64 matrix on a TFT display",
+    "authors": [
+      {
+        "name": "Daniel Olivera",
+        "email": "3daniel.olivera@example.com"
+      }
+    ],
+    "license": "MIT",
+    "frameworks": "arduino",
+    "platforms": "espressif8266"
+  }
