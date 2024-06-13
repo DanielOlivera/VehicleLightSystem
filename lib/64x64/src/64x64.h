@@ -6,7 +6,7 @@
 class Matrix64x64 {
 public:
     Matrix64x64();
-    void DirectionIndicatorLight(int x, int y, uint16_t color, Adafruit_ILI9341 &tft);
+    void DirectionIndicatorLight(int x, int y, uint16_t color1, uint16_t color2, unsigned long interval, Adafruit_ILI9341 &tft);
     
 private:
     const uint8_t DirectionIndicatorLight_R[64*64] = {
@@ -75,6 +75,8 @@ private:
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     };
+    unsigned long lastBlinkTime;
+    bool blinkState;
 };
 
 #endif

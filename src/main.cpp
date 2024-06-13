@@ -129,10 +129,14 @@ void loop() {
     int currentLux = obtenerLuminosidad();
     desplegarLuminosidad(currentLux);
   }
-  controlarDibujo();
+  //controlarDibujo();
+  // Controlar el dibujo del indicador con parpadeo
+  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_1) == HIGH) {
+    matrix.DirectionIndicatorLight(50, 100, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+  }
 }
 
-void controlarDibujo() {
+/*void controlarDibujo() {
     if (mcp.digitalRead(MCP23X17_CONTROL_PIN_1) == HIGH) {
         if (!DirectionIndicatorLightDibujada) {
             matrix.DirectionIndicatorLight(50, 50, ILI9341_YELLOW, tft);
@@ -144,4 +148,4 @@ void controlarDibujo() {
             DirectionIndicatorLightDibujada = false;
         }
     }
-}
+}*/
