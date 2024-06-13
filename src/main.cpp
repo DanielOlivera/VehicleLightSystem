@@ -11,8 +11,6 @@
 void iniciarBH1750();
 int obtenerLuminosidad();
 void desplegarLuminosidad(int lux);
-void dibujarFlecha(int x, int y, int size, uint16_t color, String direccion);
-void parpadearFlecha();
 void controlarDibujo();
 
 // Definición de pines para la pantalla TFT
@@ -31,9 +29,6 @@ void controlarDibujo();
 #define MCP23X17_CONTROL_PIN_6 5  // Pin 5 del MCP23X17
 #define MCP23X17_CONTROL_PIN_7 6  // Pin 6 del MCP23X17
 #define MCP23X17_CONTROL_PIN_8 7  // Pin 7 del MCP23X17
-
-// Definición de pines para el control de parpadeo
-//#define CONTROL_PIN_0 D0
 
 // Inicializar componentes
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
@@ -79,30 +74,6 @@ void desplegarLuminosidad(int lux) {
   }
 }
 
-void dibujarFlecha(int x, int y, int size, uint16_t color, String direccion) {
-  tft.fillRect(x - size, y - size, size * 2, size * 2, ILI9341_BLACK);
-  if (direccion == "izq") {
-    tft.fillTriangle(x - size / 2, y, x + size / 2, y - size / 2, x + size / 2, y + size / 2, color);
-    tft.fillRect(x + size / 2, y - size / 6, size / 2, size / 3, color);
-  } else if (direccion == "der") {
-    tft.fillTriangle(x + size / 2, y, x - size / 2, y - size / 2, x - size / 2, y + size / 2, color);
-    tft.fillRect(x - size, y - size / 6, size / 2, size / 3, color);
-  }
-}
-
-void parpadearFlecha() {
-  if (millis() - lastFlechaUpdate >= 500) {  // Cambiar color cada 500 ms
-    lastFlechaUpdate = millis();
-    estadoFlecha = !estadoFlecha;  // Alternar el estado de la flecha
-
-    if (estadoFlecha) {
-      dibujarFlecha(tft.width() / 2, tft.height() / 2, 50, ILI9341_GREEN, "izq");  // Flecha verde claro
-    } else {
-      dibujarFlecha(tft.width() / 2, tft.height() / 2, 50, ILI9341_ORANGE, "izq");  // Flecha naranja
-    }
-  }
-}
-
 void setup() {
   Serial.begin(115200);
   tft.begin();
@@ -110,14 +81,11 @@ void setup() {
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
   tft.setTextSize(2);
   Wire.begin(D2, D1); // Inicializa I2C
-  //pinMode(CONTROL_PIN_0, INPUT_PULLDOWN_16); // Configura el pin de control como entrada
-  
   mcp.begin_I2C();
   mcp.pinMode(MCP23X17_CONTROL_PIN_1, INPUT);
   mcp.digitalWrite(MCP23X17_CONTROL_PIN_1, LOW);  // Establecer el estado inicial a LOW
   mcp.pinMode(MCP23X17_CONTROL_PIN_2, INPUT);
   mcp.digitalWrite(MCP23X17_CONTROL_PIN_2, LOW);  // Establecer el estado inicial a LOW
-  
   tft.fillScreen(ILI9341_BLACK);
   tft.setCursor(0, 0);
   iniciarBH1750();
@@ -129,23 +97,13 @@ void loop() {
     int currentLux = obtenerLuminosidad();
     desplegarLuminosidad(currentLux);
   }
-  //controlarDibujo();
-  // Controlar el dibujo del indicador con parpadeo
-  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_1) == HIGH) {
-    matrix.DirectionIndicatorLight(50, 100, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
-  }
+  controlarDibujo();
 }
 
-/*void controlarDibujo() {
-    if (mcp.digitalRead(MCP23X17_CONTROL_PIN_1) == HIGH) {
-        if (!DirectionIndicatorLightDibujada) {
-            matrix.DirectionIndicatorLight(50, 50, ILI9341_YELLOW, tft);
-            DirectionIndicatorLightDibujada = true;
-        }
-    } else {
-        if (DirectionIndicatorLightDibujada) {
-            tft.fillRect(50, 50, 64, 64, ILI9341_BLACK);  // Borra la DirectionIndicatorLight_R
-            DirectionIndicatorLightDibujada = false;
-        }
-    }
-}*/
+void controlarDibujo() {
+  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_1) == HIGH) {
+    matrix.DirectionIndicatorLight_R(50, 100, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+  } else {
+    matrix.DirectionIndicatorLight_R(50, 100, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo
+  }
+}

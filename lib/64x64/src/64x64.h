@@ -6,7 +6,8 @@
 class Matrix64x64 {
 public:
     Matrix64x64();
-    void DirectionIndicatorLight_R(int x, int y, uint16_t color1, uint16_t color2, unsigned long interval, Adafruit_ILI9341 &tft);
+    void DirectionIndicatorLight_R(int x, int y, uint16_t color1, Adafruit_ILI9341 &tft); // Se elimina el parámetro color2 y interval 
+    void DirectionIndicatorLight_R(int x, int y, uint16_t color1, uint16_t color2, unsigned long interval, Adafruit_ILI9341 &tft); // Se agrega el parámetro interval
     
 private:
     const uint8_t DirectionIndicatorLight_RMatrix[64*64] = {
