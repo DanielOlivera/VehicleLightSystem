@@ -45,32 +45,23 @@ bool DirectionIndicatorLightDibujada  = false; // Indica si la carita feliz est√
 
 void iniciarBH1750() {
   Wire.beginTransmission(0x5C);
-  if (Wire.endTransmission() == 0) {
-    if (lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x5C)) {
-      tft.println("BH1750 OK");
-    } else {
-      tft.println("BH1750 Error");
-    }
+  if (Wire.endTransmission() == 0 && lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x5C)) {
+    tft.println("BH1750 OK");
   } else {
-    tft.println("BH1750 No Responde");
+    tft.println("BH1750 Error o No Responde");
   }
 }
 
 int obtenerLuminosidad() {
-  if (lightMeter.measurementReady(true)) {
-    return static_cast<int>(lightMeter.readLightLevel());
-  }
-  return -1;
+  return lightMeter.measurementReady(true) ? static_cast<int>(lightMeter.readLightLevel()) : -1;
 }
 
 void desplegarLuminosidad(int lux) {
   if (lux != lastLux) {
-    char buffer[20]; // Buffer para almacenar el texto de salida
-    sprintf(buffer, "Luz: %d lx", lux); // Formatea la salida en el buffer
     tft.fillRect(0, 20, 240, 40, ILI9341_BLACK); // Limpia solo la parte del texto
-    tft.setCursor(0, 20);
-    tft.print(buffer); // Imprime el texto desde el buffer
-    lastLux = lux;
+    tft.setCursor(0, 20); // Posiciona el cursor en la pantalla TFT
+    tft.printf("Luz: %d lx", lux); // Imprime el texto formateado directamente
+    lastLux = lux; // Actualiza la √∫ltima lectura de luminosidad
   }
 }
 
