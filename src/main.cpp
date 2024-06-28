@@ -41,7 +41,6 @@ int lastLux = -1; // Almacena la última lectura de luminosidad para comparació
 unsigned long lastFlechaUpdate = 0;
 unsigned long lastLuxUpdate = 0;
 bool estadoFlecha = false;
-bool DirectionIndicatorLightDibujada  = false; // Indica si la carita feliz está dibujada
 
 void iniciarBH1750() {
   Wire.beginTransmission(0x5C);
@@ -65,8 +64,10 @@ void desplegarLuminosidad(int lux) {
   }
 }
 
+
+
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   tft.begin();
   tft.setRotation(0);
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
@@ -95,6 +96,6 @@ void controlarDibujo() {
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_1) == HIGH) {
     matrix.DirectionIndicatorLight_R(50, 100, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
   } else {
-    matrix.DirectionIndicatorLight_R(50, 100, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo
+    matrix.DirectionIndicatorLight_R(50, 100, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
   }
 }
