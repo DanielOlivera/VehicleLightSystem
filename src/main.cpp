@@ -20,6 +20,12 @@ void controlarDibujo();
 #define TFT_CLK  D5
 #define TFT_MISO D6
 
+// Definición del colores oscuros formato RGB565
+#define DARKRED 0x8800
+#define DARKBLUE 0x0010
+#define DARKORANGE 0xBAA0
+#define ORANGE 0xFC60
+
 // Pines del MCP23X17
 #define MCP23X17_CONTROL_PIN_1 0  // Pin 0 del MCP23X17
 #define MCP23X17_CONTROL_PIN_2 1  // Pin 1 del MCP23X17
@@ -100,44 +106,45 @@ void loop() {
 
 void controlarDibujo() {
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_1) == HIGH) {
-    matrix.DirectionIndicatorLight_R(8, 64, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+    matrix.DirectionIndicatorLight_R(168, 64, ILI9341_RED, ILI9341_GREEN, 500, tft);
   } else {
-    matrix.DirectionIndicatorLight_R(8, 64, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+    matrix.DirectionIndicatorLight_R(168, 64, ILI9341_DARKGREEN, tft);
   }
-
+  
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_2) == HIGH) {
-    matrix.DirectionIndicatorLight_L(168, 64, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+    matrix.DirectionIndicatorLight_L(8, 64, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
   } else {
-    matrix.DirectionIndicatorLight_L(168, 64, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+    matrix.DirectionIndicatorLight_L(8, 64, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
   }
 
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_3) == HIGH) {
-    matrix.ParkingLights(88, 64, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+    matrix.ParkingLights(88, 64, ORANGE, ILI9341_GREEN, 500, tft);
   } else {
-    matrix.ParkingLights(88, 64, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+    matrix.ParkingLights(88, 64, DARKORANGE, tft); 
   }
 
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_4) == HIGH) {
-    matrix.HazardLights(88, 138, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+    matrix.HazardLights(88, 138, ILI9341_RED, DARKRED, 500, tft);
   } else {
-    matrix.HazardLights(88, 138, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+    matrix.HazardLights(88, 138, DARKRED, tft); 
   }
 
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_5) == HIGH) {
-    matrix.HighBeams(8, 212, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+    matrix.HighBeams(8, 212, ILI9341_BLUE, tft);
   } else {
-    matrix.HighBeams(8, 212, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+    matrix.HighBeams(8, 212, DARKBLUE, tft); 
   }
 
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_6) == HIGH) {
-    matrix.LowBeams(88, 212, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+    matrix.LowBeams(88, 212, ILI9341_BLUE, tft);
   } else {
-    matrix.LowBeams(88, 212, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+    matrix.LowBeams(88, 212, DARKBLUE, tft); 
   }
 
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_7) == HIGH) {
-    matrix.FogLights(168, 212, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+    matrix.FogLights(168, 212, ILI9341_BLUE, tft);
   } else {
-    matrix.FogLights(168, 212, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+    matrix.FogLights(168, 212, DARKBLUE, tft); 
   }
 }
+
