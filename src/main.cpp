@@ -47,14 +47,12 @@ void iniciarBH1750() {
   if (Wire.endTransmission() == 0 && lightMeter.begin(BH1750::CONTINUOUS_HIGH_RES_MODE, 0x5C)) {
     tft.println("BH1750 OK");
   } else {
-    tft.println("BH1750 Error o No Responde");
+    tft.println("BH1750 Error");
   }
 }
-
 int obtenerLuminosidad() {
   return lightMeter.measurementReady(true) ? static_cast<int>(lightMeter.readLightLevel()) : -1;
 }
-
 void desplegarLuminosidad(int lux) {
   if (lux != lastLux) {
     tft.fillRect(0, 20, 240, 40, ILI9341_BLACK); // Limpia solo la parte del texto
@@ -63,8 +61,6 @@ void desplegarLuminosidad(int lux) {
     lastLux = lux; // Actualiza la última lectura de luminosidad
   }
 }
-
-
 
 void setup() {
   Serial.begin(9600);
@@ -78,6 +74,16 @@ void setup() {
   mcp.digitalWrite(MCP23X17_CONTROL_PIN_1, LOW);  // Establecer el estado inicial a LOW
   mcp.pinMode(MCP23X17_CONTROL_PIN_2, INPUT);
   mcp.digitalWrite(MCP23X17_CONTROL_PIN_2, LOW);  // Establecer el estado inicial a LOW
+  mcp.pinMode(MCP23X17_CONTROL_PIN_3, INPUT);
+  mcp.digitalWrite(MCP23X17_CONTROL_PIN_3, LOW);  // Establecer el estado inicial a LOW
+  mcp.pinMode(MCP23X17_CONTROL_PIN_4, INPUT);
+  mcp.digitalWrite(MCP23X17_CONTROL_PIN_4, LOW);  // Establecer el estado inicial a LOW
+  mcp.pinMode(MCP23X17_CONTROL_PIN_5, INPUT);
+  mcp.digitalWrite(MCP23X17_CONTROL_PIN_5, LOW);  // Establecer el estado inicial a LOW
+  mcp.pinMode(MCP23X17_CONTROL_PIN_6, INPUT);
+  mcp.digitalWrite(MCP23X17_CONTROL_PIN_6, LOW);  // Establecer el estado inicial a LOW
+  mcp.pinMode(MCP23X17_CONTROL_PIN_7, INPUT);
+  mcp.digitalWrite(MCP23X17_CONTROL_PIN_7, LOW);  // Establecer el estado inicial a LOW
   tft.fillScreen(ILI9341_BLACK);
   tft.setCursor(0, 0);
   iniciarBH1750();
@@ -87,15 +93,51 @@ void loop() {
   if (millis() - lastLuxUpdate >= 250) {  // Actualizar luminosidad cada 2 segundos
     lastLuxUpdate = millis();
     int currentLux = obtenerLuminosidad();
-    desplegarLuminosidad(currentLux);
+    //desplegarLuminosidad(currentLux);
   }
   controlarDibujo();
 }
 
 void controlarDibujo() {
   if (mcp.digitalRead(MCP23X17_CONTROL_PIN_1) == HIGH) {
-    matrix.DirectionIndicatorLight_R(50, 100, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+    matrix.DirectionIndicatorLight_R(8, 64, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
   } else {
-    matrix.DirectionIndicatorLight_R(50, 100, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+    matrix.DirectionIndicatorLight_R(8, 64, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+  }
+
+  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_2) == HIGH) {
+    matrix.DirectionIndicatorLight_L(168, 64, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+  } else {
+    matrix.DirectionIndicatorLight_L(168, 64, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+  }
+
+  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_3) == HIGH) {
+    matrix.ParkingLights(88, 64, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+  } else {
+    matrix.ParkingLights(88, 64, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+  }
+
+  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_4) == HIGH) {
+    matrix.HazardLights(88, 138, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+  } else {
+    matrix.HazardLights(88, 138, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+  }
+
+  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_5) == HIGH) {
+    matrix.HighBeams(8, 212, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+  } else {
+    matrix.HighBeams(8, 212, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+  }
+
+  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_6) == HIGH) {
+    matrix.LowBeams(88, 212, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+  } else {
+    matrix.LowBeams(88, 212, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
+  }
+
+  if (mcp.digitalRead(MCP23X17_CONTROL_PIN_7) == HIGH) {
+    matrix.FogLights(168, 212, ILI9341_RED, ILI9341_GREEN, 500, tft);  // Parpadeo cada 500 ms entre rojo y verde
+  } else {
+    matrix.FogLights(168, 212, ILI9341_DARKGREEN, tft);  // Flecha verde oscura sin parpadeo   
   }
 }
