@@ -135,7 +135,7 @@ const uint8_t DirectionIndicatorLight_LMatrix[64*64] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-const uint8_t ParkingLights_Matrix[64*64] = {
+const uint8_t Lights_Matrix[64*64] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -541,10 +541,10 @@ void Matrix64x64::DirectionIndicatorLight_L(int x, int y, uint16_t color1, uint1
     }
 }
 
-void Matrix64x64::ParkingLights(int x, int y, uint16_t color, Adafruit_ILI9341 &tft) {
+void Matrix64x64::Lights(int x, int y, uint16_t color, Adafruit_ILI9341 &tft) {
     for (int i = 0; i < 64; i++) {
         for (int j = 0; j < 64; j++) {
-            if (pgm_read_byte(&(ParkingLights_Matrix[i * 64 + j])) == 1) {
+            if (pgm_read_byte(&(Lights_Matrix[i * 64 + j])) == 1) {
                 tft.drawPixel(x + j, y + i, color);
             } else {
                 tft.drawPixel(x + j, y + i, ILI9341_BLACK);
@@ -553,7 +553,7 @@ void Matrix64x64::ParkingLights(int x, int y, uint16_t color, Adafruit_ILI9341 &
     }
 }
 
-void Matrix64x64::ParkingLights(int x, int y, uint16_t color1, uint16_t color2, unsigned long interval, Adafruit_ILI9341 &tft) {
+void Matrix64x64::Lights(int x, int y, uint16_t color1, uint16_t color2, unsigned long interval, Adafruit_ILI9341 &tft) {
     unsigned long currentTime = millis();
     if (currentTime - lastBlinkTime >= interval) {
         lastBlinkTime = currentTime;
@@ -564,7 +564,7 @@ void Matrix64x64::ParkingLights(int x, int y, uint16_t color1, uint16_t color2, 
 
     for (int i = 0; i < 64; i++) {
         for (int j = 0; j < 64; j++) {
-            if (pgm_read_byte(&(ParkingLights_Matrix[i * 64 + j])) == 1) {
+            if (pgm_read_byte(&(Lights_Matrix[i * 64 + j])) == 1) {
                 tft.drawPixel(x + j, y + i, currentColor);
             } else {
                 tft.drawPixel(x + j, y + i, ILI9341_BLACK);
